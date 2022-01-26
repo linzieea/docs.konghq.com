@@ -54,61 +54,6 @@ Now, if you try to access the route without providing an API key, the request wi
 
 Before Kong proxies requests for this route, it needs an API key. For this example, since you installed the Key Authentication plugin, you need to create a consumer with an associated key first.
 {% endnavtab %}
-{% navtab Using the Admin API %}
-
-Call the Admin API on port `8001` and configure plugins to enable key
-authentication. For this example, apply the plugin to the */mock* route you
-created:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X POST http://<admin-hostname>:8001/routes/mocking/plugins \
-  --data name=key-auth
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8001/routes/mocking/plugins \
-  name=key-auth
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Try to access the service again:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i http://<admin-hostname>:8000/mock
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8000/mock
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Since you added key authentication, you should be unable to access it:
-
-```sh
-HTTP/1.1 401 Unauthorized
-...
-{
-    "message": "No API key found in request"
-}
-```
-
-Before Kong proxies requests for this route, it needs an API key. For this
-example, since you installed the Key Authentication plugin, you need to create
-a consumer with an associated key first.
-
-{% endnavtab %}
 {% navtab Using decK (YAML) %}
 1. Under the `mocking` route in the `routes` section of the `kong.yaml` file,
 add a plugin section and enable the `key-auth` plugin:
@@ -181,70 +126,6 @@ a consumer with an associated key first.
 
   The new Key Authentication ID displays on the **Consumers** page under the **Credentials** tab.
 {% endnavtab %}
-{% navtab Using the Admin API %}
-
-To create a consumer, call the Admin API and the consumer’s endpoint.
-The following creates a new consumer called **consumer**:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i -X POST http://<admin-hostname>:8001/consumers/ \
-  --data username=consumer \
-  --data custom_id=consumer
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8001/consumers \
-  username=consumer \
-  custom_id=consumer
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Once provisioned, call the Admin API to provision a key for the consumer
-created above. For this example, set the key to `apikey`.
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i -X POST http://<admin-hostname>:8001/consumers/consumer/key-auth \
-  --data key=apikey
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8001/consumers/consumer/key-auth \
-  key=apikey
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-If no key is entered, Kong automatically generates the key.
-
-Result:
-
-```sh
-HTTP/1.1 201 Created
-...
-{
-    "consumer": {
-        "id": "2c43c08b-ba6d-444a-8687-3394bb215350"
-    },
-    "created_at": 1568255693,
-    "id": "86d283dd-27ee-473c-9a1d-a567c6a76d8e",
-    "key": "apikey"
-}
-```
-
-You now have a consumer with an API key provisioned to access the route.
-
-{% endnavtab %}
 {% navtab Using decK (YAML) %}
 1. Add a `consumers` section to your `kong.yaml` file and create a new consumer:
 
@@ -304,38 +185,11 @@ You now have a consumer with an API key provisioned to access the route.
 
 ## Validate Key Authentication
 
-{% navtabs %}
-{% navtab Using a Web Browser %}
-
 To validate the Key Authentication plugin, access your route through your browser by appending `?apikey=apikey` to the url:
 ```
 http://<admin-hostname>:8000/mock/?apikey=apikey
 ```
 
-{% endnavtab %}
-{% navtab Using the Admin API %}
-To validate the Key Authentication plugin, access the *mocking* route again, using the header `apikey` with a key value of `apikey`.
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i http://<admin-hostname>:8000/mock/request \
-  -H 'apikey:apikey'
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8000/mock/request apikey:apikey
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-You should get an `HTTP/1.1 200 OK` message in response.
-
-{% endnavtab %}
-{% endnavtabs %}
 
 ## (Optional) Disable the plugin
 If you are following this getting started guide topic by topic, you will need to use this API key in any requests going forward. If you don’t want to keep specifying the key, disable the plugin before moving on.
@@ -344,50 +198,6 @@ If you are following this getting started guide topic by topic, you will need to
 {% navtab Using Kong Manager %}
 1. Go to the Plugins page and click on **View** for the key-auth row.
 2. Use the toggle at the top of the page to switch the plugin from **Enabled** to **Disabled**.
-{% endnavtab %}
-{% navtab Using the Admin API %}
-
-Find the plugin ID and copy it:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X GET http://<admin-hostname>:8001/routes/mocking/plugins/
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8001/routes/mocking/plugins
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Output:
-```sh
-"id": "2512e48d9-7by0-674c-84b7-00606792f96b"
-```
-
-Disable the plugin:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X PATCH http://<admin-hostname>:8001/routes/mocking/plugins/{<plugin-id>} \
-  --data enabled=false
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http -f patch :8001/routes/mocking/plugins/{<plugin-id>} \
-  enabled=false
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
 {% endnavtab %}
 {% navtab Using decK (YAML) %}
 
@@ -417,4 +227,4 @@ In this topic, you:
 * Created a new consumer named `consumer`.
 * Gave the consumer an API key of `apikey` so that it could access the `/mock` route with authentication.
 
-Next, you’ll learn about [load balancing upstream services using targets](/gateway/{{page.kong_version}}/get-started/comprehensive/load-balancing).
+Next, you’ll learn about [load balancing upstream services using targets](/konnect/getting-started/load-balancing).

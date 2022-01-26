@@ -42,72 +42,6 @@ In this section, you will create an Upstream named `upstream` and add two target
 11. Find your `example_service` and click **Edit**.
 12. Change the **Host** field to `upstream`, then click **Update**.
 {% endnavtab %}
-{% navtab Using the Admin API %}
-
-Call the Admin API on port `8001` and create an Upstream named `upstream`:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X POST http://<admin-hostname>:8001/upstreams \
-  --data name=upstream
-```
-{% endnavtab %}
-{% navtab HTTPie %}    
-```sh
-http POST :8001/upstreams \
-  name=upstream
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Update the service you created previously to point to this upstream:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X PATCH http://<admin-hostname>:8001/services/example_service \
-  --data host='upstream'
-```
-{% endnavtab %}
-{% navtab HTTPie %}    
-```sh
-http PATCH :8001/services/example_service \
-  host='upstream'
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-Add two targets to the upstream, each with port 80: `mockbin.org:80` and
-`httpbin.org:80`:
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -X POST http://<admin-hostname>:8001/upstreams/upstream/targets \
-  --data target='mockbin.org:80'
-
-curl -X POST http://<admin-hostname>:8001/upstreams/upstream/targets \
-  --data target='httpbin.org:80'
-```
-{% endnavtab %}
-{% navtab HTTPie %}    
-```sh
-http POST :8001/upstreams/upstream/targets \
-  target=mockbin.org:80
-http POST :8001/upstreams/upstream/targets \
-  target=httpbin.org:80
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-{% endnavtab %}
 
 {% navtab Using decK (YAML) %}
 1. In your `kong.yaml` file, create an Upstream with two targets, each with port
@@ -198,4 +132,4 @@ In this topic, you:
 * Created an Upstream object named `upstream` and pointed the Service `example_service` to it.
 * Added two targets, `httpbin.org` and `mockbin.org`, with equal weight to the Upstream.
 
-If you have a {{site.konnect_product_name}} subscription, go on to [Managing Administrative Teams](/gateway/{{page.kong_version}}/get-started/comprehensive/manage-teams).
+Next, if you have a {{site.konnect_product_name}} subscription, set up the [Dev Portal](/konnect/getting-started/dev-portal).

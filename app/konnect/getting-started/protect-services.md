@@ -48,35 +48,6 @@ Rate limiting protects the APIs from accidental or malicious overuse. Without ra
 
 7. Click **Create**.
 {% endnavtab %}
-{% navtab Using the Admin API %}
-
-{:.note}
-> **Note:** This section sets up the basic Rate Limiting plugin. If you have a {{site.base_gateway}} instance, see instructions for **Using Kong Manager** to set up Rate Limiting Advanced with sliding window support instead.
-
-Call the Admin API on port `8001` and configure plugins to enable a limit of five (5) requests per minute, stored locally and in-memory, on the node.
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i -X POST http://<admin-hostname>:8001/plugins \
-  --data name=rate-limiting \
-  --data config.minute=5 \
-  --data config.policy=local
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http -f post :8001/plugins \
-  name=rate-limiting \
-  config.minute=5 \
-  config.policy=local
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-{% endnavtab %}
 {% navtab Using decK (YAML) %}
 
 {:.note}
@@ -137,43 +108,10 @@ and in-memory, on the node:
 
 ## Validate Rate Limiting
 
-{% navtabs %}
-{% navtab Using a Web Browser %}
-
 1. Enter `<admin-hostname>:8000/mock` and refresh your browser six times.
     After the 6th request, you’ll receive an error message.
 2. Wait at least 30 seconds and try again.
     The service will be accessible until the sixth (6th) access attempt within a 30-second window.
-
-{% endnavtab %}
-{% navtab Using the Admin API %}
-
-To validate rate limiting, access the API six (6) times from the CLI to confirm the requests are rate limited.
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i -X GET http://<admin-hostname>:8000/mock/request
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http :8000/mock/request
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-
-After the 6th request, you should receive a 429 "API rate limit exceeded" error:
-```
-{
-"message": "API rate limit exceeded"
-}
-```
-{% endnavtab %}
-{% endnavtabs %}
 
 
 ## Summary and next steps
@@ -185,4 +123,4 @@ setting the rate limit to 5 times per minute.
 * If using Kong Manager, you enabled the Rate Limiting Advanced plugin,
 setting the rate limit to 5 times for every 30 seconds.
 
-Next, head on to learn about [proxy caching](/gateway/{{page.kong_version}}/get-started/comprehensive/improve-performance).
+Next, head on to learn about [proxy caching](/konnect/getting-started/improve-performance).

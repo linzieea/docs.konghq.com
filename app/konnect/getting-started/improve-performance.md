@@ -45,34 +45,7 @@ Use proxy caching so that Upstream services are not bogged down with repeated re
 
 8. Click **Create**.
 {% endnavtab %}
-{% navtab Using the Admin API %}
 
-Call the Admin API on port `8001` and configure plugins to enable in-memory caching globally, with a timeout of 30 seconds for Content-Type `application/json`.
-
-<!-- codeblock tabs -->
-{% navtabs codeblock %}
-{% navtab cURL %}
-```sh
-curl -i -X POST http://<admin-hostname>:8001/plugins \
-  --data name=proxy-cache \
-  --data config.content_type="application/json; charset=utf-8" \
-  --data config.cache_ttl=30 \
-  --data config.strategy=memory
-```
-{% endnavtab %}
-{% navtab HTTPie %}
-```sh
-http -f :8001/plugins \
-  name=proxy-cache \
-  config.strategy=memory \
-  config.cache_ttl=30 \
-  config.content_type="application/json; charset=utf-8"
-```
-{% endnavtab %}
-{% endnavtabs %}
-<!-- end codeblock tabs -->
-
-{% endnavtab %}
 {% navtab Using decK (YAML) %}
 
 1. In the `plugins` section of your `kong.yaml` file, add the `proxy-cache`
@@ -200,4 +173,4 @@ In this section, you:
 * Set up the Proxy Caching plugin, then accessed the `/mock` route multiple times to see caching in effect.
 * Witnessed the performance differences in latency with and without caching.
 
-Next, you’ll learn about [securing services](/gateway/{{page.kong_version}}/get-started/comprehensive/secure-services).
+Next, you’ll learn about [securing services](/konnect/getting-started/secure-services).
