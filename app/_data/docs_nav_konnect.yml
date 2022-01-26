@@ -51,14 +51,22 @@
   icon: /assets/images/icons/documentation/icn-quickstart-color.svg
   url: /getting-started/
   items:
-    - text: Quickstart guide
-      items:
-        - text: Set up a Runtime
-          url: /getting-started/configure-runtime
-        - text: Configure a Service
-          url: /getting-started/configure-service
-        - text: Implement and Test the Service
-          url: /getting-started/implement-service
+    - text: Set up a Runtime
+      url: /getting-started/configure-runtime
+    - text: Configure a Service
+      url: /getting-started/configure-service
+    - text: Implement and Test the Service
+      url: /getting-started/implement-service
+    - text: Protect your Services
+      url: /getting-started/protect-services
+    - text: Improve Performance
+      url: /getting-started/improve-performance
+    - text: Secure Services
+      url: /getting-started/secure-services
+    - text: Set Up Intelligent Load Balancing
+      url: /getting-started/load-balancing
+    - text: Publish, Locate, and Consume Services
+      url: /getting-started/dev-portal
     - text: Manage Konnect Cloud with decK
       url: /getting-started/declarative-config
 
