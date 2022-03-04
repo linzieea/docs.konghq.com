@@ -193,7 +193,7 @@ Reminder: the plugin will take effect after restart kong:
     
     kong restart
 
-But, if you want to apply plugin while kong never stop, you can use this:
+But, if you want to apply the plugin(s) while kong remains running, you can use this:
 
     kong prepare
     kong reload
